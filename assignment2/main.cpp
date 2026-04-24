@@ -14,7 +14,7 @@
 #include <string>
 #include <unordered_set>
 
-std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
+std::string kYourName = "Olivia Rodrigo"; // Don't forget to change this!
 
 /**
  * Takes in a file name and returns a set containing all of the applicant names as a set.
@@ -27,8 +27,15 @@ std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
  * below it) to use a `std::unordered_set` instead. If you do so, make sure
  * to also change the corresponding functions in `utils.h`.
  */
-std::set<std::string> get_applicants(std::string filename) {
+std::unordered_set<std::string> get_applicants(std::string filename) {
   // STUDENT TODO: Implement this function.
+  std::unordered_set<std::string> names;
+  std::ifstream file(filename); 
+  std::string line;
+  while (std::getline(file, line)) {
+    names.insert(line);
+  }
+  return names;
 }
 
 /**
@@ -39,8 +46,21 @@ std::set<std::string> get_applicants(std::string filename) {
  * @param students  The set of student names.
  * @return          A queue containing pointers to each matching name.
  */
-std::queue<const std::string*> find_matches(std::string name, std::set<std::string>& students) {
+std::queue<const std::string*> find_matches(std::string name, std::unordered_set<std::string>& students) {
   // STUDENT TODO: Implement this function.
+  std::queue<const std::string*> q;
+
+  char first = name[0];
+  int i = name.find(' ');
+  char last = name[i + 1];
+
+  for (const std::string& s : students) { // IMPORTANT! Containers have CONST references to the keys/elements inside of them!!
+    int i = s.find(' ');
+    if (s[0] == first && s[i + 1] == last) {
+      q.push(&s);
+    }
+  }
+  return q;
 }
 
 /**
@@ -55,6 +75,19 @@ std::queue<const std::string*> find_matches(std::string name, std::set<std::stri
  */
 std::string get_match(std::queue<const std::string*>& matches) {
   // STUDENT TODO: Implement this function.
+  if (matches.empty()) {
+    return "NO MATCHES FOUND.";
+  }
+
+  // Queue doesn't support random indexing (so we gotta just continuously pop)
+  // Also this way of random is biased towards the front so it's not recommended (outdated)
+  srand(time(nullptr)); // seeds random number based on current time since epoch
+  int end = rand() % matches.size();
+  for (int i = 0; i < end; i++) {
+    matches.pop();
+  }
+
+  return *matches.front();
 }
 
 /* #### Please don't remove this line! #### */
