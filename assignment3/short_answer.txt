@@ -5,7 +5,7 @@ Make a Class
 ------------
 
 Q1. What’s const-correctness and why is it important?
-A1. TODO
+A1. Const-correctness makes sure that methods that aren't supposed to modify the state of an object are marked as const. This is important because it allows the compiler to enforce that certain methods do not change the object, which can help prevent bugs and improve code safety.
 
 Q2. Is your class const-correct? How do you know?
-A2. TODO
+A2. If all getter methods are marked as const, then the class is const-correct.
