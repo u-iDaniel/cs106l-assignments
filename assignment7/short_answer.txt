@@ -5,13 +5,14 @@ Unique Pointer
 --------------
 
 Q1. List one or two benefits of using RAII to manage memory instead manually calling `new` and `delete`.
-A1. TODO
+A1. 1. Easily manage dynamically allocated memory by releasing resources automatically when they go out of scope
+    2. Resources are released in the event of an exception being thrown 
 
 Q2. When implementing move semantics for a `unique_ptr`, for example in the move constructor `unique_ptr(unique_ptr&& other)`, it is essential that we set the underlying pointer of the `other` parameter to `nullptr` before exiting the function. Explain in your own words what problem would arise if we did not.
-A2. TODO
+A2. The other unique_ptr will go out of scope at the end of the function (since its an rvalue, its lifetime is at the end of the line) so its destructor will be called, destroying the very same data that was moved. Therefore we must reassign to nullptr to avoid deletion of the data that was just moved
 
 Q3. This method of recursive deallocation through RAII works great for small lists, but may pose a problem for longer lists. Why? Hint: what is the limit for how "deep" a recursive function's call stack can grow?
-A3. TODO
+A3. The max recursive depth is usually around 1000, so if the list is longer than that, we will get a stack overflow error when trying to deallocate the list recursively. One solution is to iteratively deallocate the list
 
 Q4. What does `std::move` do in this context? Why is it safe to use `std::move` and move semantics here?
-A4. TODO
+A4. std::move turns the value into an rvalue reference (so its lifetime is at the end of the line) and allows us to move the data instead of copying it. We can move the node ptrs as the ptrs will not be used anywhere else so making a copy is unnecessary 
